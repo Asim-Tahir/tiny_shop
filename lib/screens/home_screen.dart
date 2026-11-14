@@ -72,7 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       isLabelVisible: cartStore.itemCount > 0,
                       label: Text(
                         '${cartStore.itemCount}',
-                        style: theme.textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textInverse,
+                        ),
                       ),
                       child: const Icon(Icons.shopping_bag_outlined, size: 28),
                     ),
