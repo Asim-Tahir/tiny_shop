@@ -7,6 +7,7 @@ import "package:tiny_shop/screens/product_detail_screen.dart";
 import "package:tiny_shop/services/api_services.dart";
 import "package:tiny_shop/store/cart_store.dart";
 import "package:tiny_shop/theme/app_tokens.dart";
+import "package:tiny_shop/utils/product.dart";
 
 class HomeScreen extends StatefulWidget {
   const new({super.key});
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final apiService = ProductAPIService();
+  final searchController = TextEditingController();
   List<ProductResponseData> products = [];
   bool isLoading = false;
   String errorMessage = '';
@@ -45,15 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    loadProducts();
-
     super.initState();
+
+    loadProducts();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cartStore = CartScope.of(context);
+    final visibleProducts = searchProducts(products, searchController.text);
 
     return Scaffold(
       body: SafeArea(
@@ -107,6 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(AppRadii.md),
                 ),
                 child: TextField(
+                  controller: searchController,
+                  textInputAction: TextInputAction.search,
+                  onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: 'Search products...',
                     hintStyle: const TextStyle(color: AppColors.textMuted),
@@ -115,6 +128,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.search,
                       color: AppColors.textMuted,
                     ),
+                    suffixIcon: searchController.text.isEmpty
+                        ? null
+                        : IconButton(
+                            key: const Key('clear-search'),
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              searchController.clear();
+                              setState(() {});
+                            },
+                          ),
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: AppSpacing.relaxed,
                     ),
@@ -137,31 +160,78 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: AppSpacing.lg),
 
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: AppSpacing.compact,
-                    mainAxisSpacing: AppSpacing.compact,
-                    childAspectRatio: 0.7,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ProductDetailScreen(product: product),
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : errorMessage.isNotEmpty
+                    ? Center(
+                        child: Text(
+                          errorMessage,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: AppColors.textMuted,
                           ),
-                        );
-                      },
-                      child: ProductCard(product: product),
-                    );
-                  },
-                ),
+                        ),
+                      )
+                    : visibleProducts.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              searchController.text.trim().isEmpty
+                                  ? Icons.inventory_2_outlined
+                                  : Icons.search_off_outlined,
+                              size: AppSizes.emptyStateIcon,
+                              color: AppColors.textMuted,
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              searchController.text.trim().isEmpty
+                                  ? 'No products available'
+                                  : 'No products found',
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              searchController.text.trim().isEmpty
+                                  ? 'Products will appear here when available'
+                                  : 'Try another search or clear your search',
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: AppColors.textMuted,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    : GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: AppSpacing.compact,
+                              mainAxisSpacing: AppSpacing.compact,
+                              childAspectRatio: 0.7,
+                            ),
+                        itemCount: visibleProducts.length,
+                        itemBuilder: (context, index) {
+                          final visibleProduct = visibleProducts[index];
+
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailScreen(
+                                    product: visibleProduct,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: ProductCard(product: visibleProduct),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
