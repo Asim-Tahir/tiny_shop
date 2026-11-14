@@ -5,6 +5,7 @@ abstract final class AppColors {
   static const surfaceMuted = Color(0xFFF5F5F7);
   static const primary = Color(0xFF1976D2);
   static const textPrimary = Color(0xFF000000);
+  static const textInverse = Color(0xFFFFFFFF);
   static const textSecondary = Color(0xFF757575);
   static const textMuted = Color(0xFF9E9E9E);
   static const textSubtle = Color(0xFF616161);
