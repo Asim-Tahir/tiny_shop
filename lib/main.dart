@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tiny_shop/screens/home_screen.dart';
 import 'package:tiny_shop/store/cart_store.dart';
+import 'package:tiny_shop/theme/app_tokens.dart';
 
 void main() {
   runApp(const TinyShopApp());
@@ -59,9 +60,7 @@ class _TinyShopAppState extends State<TinyShopApp> {
           notifier: cartStore,
           child: MaterialApp(
             title: 'Tiny Shop',
-            theme: ThemeData(
-              colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-            ),
+            theme: AppTheme.light,
             home: const HomeScreen(),
           ),
         );

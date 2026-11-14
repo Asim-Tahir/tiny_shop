@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tiny_shop/models/products_response.dart';
 import 'package:tiny_shop/store/cart_store.dart';
+import 'package:tiny_shop/theme/app_tokens.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductResponseData product;
@@ -15,85 +16,77 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final cartStore = CartScope.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('Back'), backgroundColor: Colors.white),
+      appBar: AppBar(title: const Text('Back')),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
               Image.network(
                 widget.product.image!,
-                height: 350,
+                height: AppSizes.productImageHeight,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
 
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.product.name!,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28,
-                      ),
+                      style: theme.textTheme.headlineSmall,
                     ),
 
-                    SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
 
                     Text(
                       widget.product.tagline!,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey.shade600,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.textSecondary,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: AppSpacing.compact),
 
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text('Description', style: theme.textTheme.titleLarge),
 
-                    SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
 
                     Text(
                       widget.product.description!,
-                      style: TextStyle(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         height: 1.5,
-                        color: Colors.grey.shade800,
+                        color: AppColors.textSubtle,
                       ),
                       textAlign: TextAlign.justify,
                     ),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: AppSpacing.compact),
 
                     Text(
                       widget.product.price!,
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.blue.shade800,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: AppColors.primary,
                       ),
                     ),
 
-                    SizedBox(height: 10),
+                    const SizedBox(height: AppSpacing.compact),
 
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        minimumSize: Size(double.infinity, 55),
+                        backgroundColor: AppColors.textPrimary,
+                        minimumSize: const Size(
+                          double.infinity,
+                          AppSizes.buttonHeight,
+                        ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppRadii.md),
                         ),
                       ),
                       onPressed: () async {
@@ -107,7 +100,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(error.message),
-                              backgroundColor: Colors.red,
+                              backgroundColor: AppColors.danger,
                             ),
                           );
                           return;
@@ -120,11 +113,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             behavior: SnackBarBehavior.floating,
                             showCloseIcon: true,
                             duration: Durations.extralong4,
-                            backgroundColor: Colors.green,
-                            margin: EdgeInsets.only(
-                              bottom: 80,
-                              left: 20,
-                              right: 20,
+                            backgroundColor: AppColors.success,
+                            margin: const EdgeInsets.only(
+                              bottom: AppSpacing.xxxl + AppSizes.buttonHeight,
+                              left: AppSpacing.xl,
+                              right: AppSpacing.xl,
                             ),
                           ),
                         );
@@ -132,16 +125,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 12,
+                        spacing: AppSpacing.md,
                         children: [
                           Icon(
                             Icons.shopping_cart_outlined,
-                            color: Colors.white,
+                            color: AppColors.background,
                             size: 24,
                           ),
                           Text(
                             'Add to Cart',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: AppColors.background,
+                            ),
                           ),
                         ],
                       ),

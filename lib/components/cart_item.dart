@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:tiny_shop/models/products_response.dart';
 import 'package:tiny_shop/store/cart_store.dart';
+import 'package:tiny_shop/theme/app_tokens.dart';
 
 class CartItem extends StatefulWidget {
   final ProductResponseData product;
@@ -68,7 +69,7 @@ class _CartItemState extends State<CartItem> {
         SnackBar(
           behavior: SnackBarBehavior.floating,
           showCloseIcon: true,
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.danger,
           content: Text(error.message),
         ),
       );
@@ -84,17 +85,18 @@ class _CartItemState extends State<CartItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.compact),
       child: Row(
         children: [
           Container(
-            width: 70,
-            height: 70,
-            padding: const EdgeInsets.all(8),
+            width: AppSizes.cartThumbnail,
+            height: AppSizes.cartThumbnail,
+            padding: const EdgeInsets.all(AppSpacing.sm),
             decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F7),
-              borderRadius: BorderRadius.circular(8),
+              color: AppColors.surfaceMuted,
+              borderRadius: BorderRadius.circular(AppRadii.sm),
               image: widget.product.image != null
                   ? DecorationImage(
                       image: NetworkImage(widget.product.image!),
@@ -103,10 +105,10 @@ class _CartItemState extends State<CartItem> {
                   : null,
             ),
             child: widget.product.image != null
-                ? const Icon(Icons.image, color: Colors.grey)
+                ? const Icon(Icons.image, color: AppColors.textMuted)
                 : null,
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: AppSpacing.lg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,29 +117,27 @@ class _CartItemState extends State<CartItem> {
                   widget.product.name!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: theme.textTheme.titleMedium,
                 ),
                 Text(
                   widget.product.tagline!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     fontStyle: FontStyle.italic,
-                    fontSize: 13,
-                    color: Colors.grey,
+                    color: AppColors.textMuted,
                   ),
                 ),
                 Text(
                   widget.product.price!,
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSubtle,
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -145,7 +145,9 @@ class _CartItemState extends State<CartItem> {
                 tooltip: widget.quantity == 1
                     ? 'Remove item'
                     : 'Decrease quantity',
-                color: widget.quantity == 1 ? Colors.red : Colors.grey,
+                color: widget.quantity == 1
+                    ? AppColors.danger
+                    : AppColors.textMuted,
                 icon: Icon(
                   widget.quantity == 1 ? Icons.delete_outlined : Icons.remove,
                 ),
@@ -154,7 +156,7 @@ class _CartItemState extends State<CartItem> {
                 },
               ),
               SizedBox(
-                width: 48,
+                width: AppSizes.quantityField,
                 child: TextField(
                   controller: _quantityController,
                   keyboardType: TextInputType.number,
@@ -164,8 +166,8 @@ class _CartItemState extends State<CartItem> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 8,
+                      horizontal: AppSpacing.xs,
+                      vertical: AppSpacing.sm,
                     ),
                     isDense: true,
                   ),

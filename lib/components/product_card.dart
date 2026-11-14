@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiny_shop/models/products_response.dart';
+import 'package:tiny_shop/theme/app_tokens.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductResponseData product;
@@ -7,14 +8,15 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(AppRadii.md),
         boxShadow: [
           BoxShadow(
             blurRadius: 10,
-            color: Colors.black26,
+            color: AppColors.shadow,
             offset: Offset(0, 6),
           ),
         ],
@@ -24,7 +26,9 @@ class ProductCard extends StatelessWidget {
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppRadii.md),
+              ),
               child: Image.network(
                 product.image!,
                 width: double.infinity,
@@ -34,30 +38,26 @@ class ProductCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(AppSpacing.sm),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  product.name!,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                Text(product.name!, style: theme.textTheme.titleMedium),
 
-                SizedBox(height: 2),
+                const SizedBox(height: AppSpacing.xxs),
 
                 Text(
                   product.tagline!,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
 
                 Text(
                   product.price!,
-                  style: TextStyle(
-                    color: Colors.blue.shade700,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: AppColors.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

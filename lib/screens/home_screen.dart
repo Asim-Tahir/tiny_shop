@@ -6,6 +6,7 @@ import "package:tiny_shop/screens/cart_screen.dart";
 import "package:tiny_shop/screens/product_detail_screen.dart";
 import "package:tiny_shop/services/api_services.dart";
 import "package:tiny_shop/store/cart_store.dart";
+import "package:tiny_shop/theme/app_tokens.dart";
 
 class HomeScreen extends StatefulWidget {
   const new({super.key});
@@ -51,30 +52,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final cartStore = CartScope.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Discover',
-                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Discover', style: theme.textTheme.displaySmall),
 
                   IconButton(
                     icon: Badge(
                       isLabelVisible: cartStore.itemCount > 0,
                       label: Text(
                         '${cartStore.itemCount}',
-                        style: TextStyle(fontSize: 14),
+                        style: theme.textTheme.bodyMedium,
                       ),
                       child: const Icon(Icons.shopping_bag_outlined, size: 28),
                     ),
@@ -90,51 +88,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
 
               Text(
                 'Find your perfect device.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: AppColors.textMuted,
+                ),
               ),
 
-              SizedBox(height: 14),
+              const SizedBox(height: AppSpacing.relaxed),
 
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFF5F5F7),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.surfaceMuted,
+                  borderRadius: BorderRadius.circular(AppRadii.md),
                 ),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search products...',
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: const TextStyle(color: AppColors.textMuted),
                     border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    contentPadding: EdgeInsets.symmetric(vertical: 14),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: AppColors.textMuted,
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.relaxed,
+                    ),
                   ),
                 ),
               ),
 
-              SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppRadii.md),
                 child: Image.network(
                   'https://wantapi.com/assets/banner.png',
                   width: double.infinity,
-                  height: 80,
+                  height: AppSizes.bannerHeight,
                   fit: BoxFit.fitWidth,
                 ),
               ),
 
-              SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
 
               Expanded(
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+                    crossAxisSpacing: AppSpacing.compact,
+                    mainAxisSpacing: AppSpacing.compact,
                     childAspectRatio: 0.7,
                   ),
                   itemCount: products.length,
