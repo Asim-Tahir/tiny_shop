@@ -54,12 +54,15 @@ a locally saved shopping cart.
 
 - Loads products from the WantAPI product endpoint.
 - Shows product cards and a detail screen with product information.
+- Filters the loaded catalog by product name, tagline, or description as you
+  type, with a clear-search control.
 - Adds products to the cart and lets you change quantities or remove items.
 - Saves cart contents on the device so they are restored when the app is opened
   again.
 
-The catalog requires an internet connection. The search field and checkout
-button are currently presentation-only; they do not perform search or checkout.
+The catalog requires an internet connection. Search filters the products
+already loaded into the catalog. The checkout button is currently
+presentation-only and does not perform checkout.
 
 ## Requirements
 
