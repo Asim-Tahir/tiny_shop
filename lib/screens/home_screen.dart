@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:tiny_shop/components/product_card.dart";
 import "package:tiny_shop/models/products_response.dart";
 import "package:tiny_shop/screens/cart_screen.dart";
+import "package:tiny_shop/screens/product_detail_screen.dart";
 import "package:tiny_shop/services/api_services.dart";
 import "package:tiny_shop/store/cart_store.dart";
 
@@ -140,7 +141,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     final product = products[index];
 
-                    return ProductCard(product: product);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetailScreen(product: product),
+                          ),
+                        );
+                      },
+                      child: ProductCard(product: product),
+                    );
                   },
                 ),
               ),
