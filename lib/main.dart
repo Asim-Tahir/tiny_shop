@@ -1,26 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:tiny_shop/screens/home_screen.dart';
-// import 'package:tiny_shop/screens/product_detail_screen.dart';
-// import 'package:tiny_shop/screens/cart_screen.dart';
-
+import 'package:tiny_shop/store/cart_store.dart';
 
 void main() {
   runApp(const TinyShopApp());
 }
 
-class TinyShopApp extends StatelessWidget {
+class TinyShopApp extends StatefulWidget {
   const TinyShopApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<TinyShopApp> createState() => _TinyShopAppState();
+}
+
+class _TinyShopAppState extends State<TinyShopApp> {
+  late final Future<CartStore> _cartStoreFuture = _createCartStore();
+  CartStore? _cartStore;
+
+  Future<CartStore> _createCartStore() async {
+    final preferences = await SharedPreferences.getInstance();
+    final cartStore = CartStore(preferences);
+    await cartStore.load();
+    return cartStore;
+  }
+
+  @override
+  void dispose() {
+    _cartStore?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tiny Shop',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const HomeScreen(),
+    return FutureBuilder<CartStore>(
+      future: _cartStoreFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: Text('Unable to load the saved cart: ${snapshot.error}'),
+              ),
+            ),
+          );
+        }
+
+        final cartStore = snapshot.data;
+        if (cartStore == null) {
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
+        }
+        _cartStore = cartStore;
+
+        return CartScope(
+          notifier: cartStore,
+          child: MaterialApp(
+            title: 'Tiny Shop',
+            theme: ThemeData(
+              colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+            ),
+            home: const HomeScreen(),
+          ),
+        );
+      },
     );
   }
 }
