@@ -27,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       setState(() {
         isLoading = true;
+        errorMessage = '';
       });
 
       final response = await apiService.getAll();
@@ -57,6 +58,44 @@ class _HomeScreenState extends State<HomeScreen> {
     searchController.dispose();
 
     super.dispose();
+  }
+
+  Widget _buildEmptyState(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String message,
+    Widget? action,
+  }) {
+    final theme = Theme.of(context);
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: AppSizes.emptyStateIcon, color: AppColors.textMuted),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            title,
+            style: theme.textTheme.titleLarge?.copyWith(
+              color: AppColors.textMuted,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            message,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: AppColors.textMuted,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (action != null) ...[
+            const SizedBox(height: AppSpacing.md),
+            action,
+          ],
+        ],
+      ),
+    );
   }
 
   @override
@@ -163,47 +202,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : errorMessage.isNotEmpty
-                    ? Center(
-                        child: Text(
-                          errorMessage,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: AppColors.textMuted,
-                          ),
+                    ? _buildEmptyState(
+                        context,
+                        icon: Icons.cloud_off_outlined,
+                        title: 'Unable to load products',
+                        message: 'Check your connection and try again.',
+                        action: TextButton(
+                          onPressed: loadProducts,
+                          child: const Text('Try again'),
                         ),
                       )
                     : visibleProducts.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              searchController.text.trim().isEmpty
-                                  ? Icons.inventory_2_outlined
-                                  : Icons.search_off_outlined,
-                              size: AppSizes.emptyStateIcon,
-                              color: AppColors.textMuted,
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            Text(
-                              searchController.text.trim().isEmpty
-                                  ? 'No products available'
-                                  : 'No products found',
-                              style: theme.textTheme.titleLarge?.copyWith(
-                                color: AppColors.textMuted,
-                              ),
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            Text(
-                              searchController.text.trim().isEmpty
-                                  ? 'Products will appear here when available'
-                                  : 'Try another search or clear your search',
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: AppColors.textMuted,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                    ? _buildEmptyState(
+                        context,
+                        icon: searchController.text.trim().isEmpty
+                            ? Icons.inventory_2_outlined
+                            : Icons.search_off_outlined,
+                        title: searchController.text.trim().isEmpty
+                            ? 'No products available'
+                            : 'No products found',
+                        message: searchController.text.trim().isEmpty
+                            ? 'Products will appear here when available'
+                            : 'Try another search or clear your search',
                       )
                     : GridView.builder(
                         gridDelegate:
