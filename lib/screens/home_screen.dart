@@ -1,5 +1,3 @@
-import "dart:developer";
-
 import "package:flutter/material.dart";
 
 import "package:tiny_shop/components/product_card.dart";
@@ -28,8 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       final response = await apiService.getAll();
-
-      log('Ürünler getirildi');
 
       setState(() {
         products = response.data ?? [];
