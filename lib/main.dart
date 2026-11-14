@@ -40,6 +40,7 @@ class _TinyShopAppState extends State<TinyShopApp> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(
               body: Center(
                 child: Text('Unable to load the saved cart: ${snapshot.error}'),
@@ -51,6 +52,7 @@ class _TinyShopAppState extends State<TinyShopApp> {
         final cartStore = snapshot.data;
         if (cartStore == null) {
           return const MaterialApp(
+            debugShowCheckedModeBanner: false,
             home: Scaffold(body: Center(child: CircularProgressIndicator())),
           );
         }
@@ -60,6 +62,7 @@ class _TinyShopAppState extends State<TinyShopApp> {
           notifier: cartStore,
           child: MaterialApp(
             title: 'Tiny Shop',
+            debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             home: const HomeScreen(),
           ),
