@@ -3,6 +3,53 @@
 Tiny Shop is a Flutter shopping app for browsing a product catalog and managing
 a locally saved shopping cart.
 
+## Screenshots
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop product catalog screen" src="https://github.com/user-attachments/assets/87dfc4af-4bcc-4bc7-b5fa-8d9b9c3ba73c" />
+          <br/>
+          <figcaption>Product catalog</figcaption>
+        </figure>
+      </td>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop product details screen" src="https://github.com/user-attachments/assets/331dd30a-bc76-4bb9-99df-ec51b4569e70" />
+          <br/>
+          <figcaption>Product details</figcaption>
+        </figure>
+      </td>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop add to cart product action" src="https://github.com/user-attachments/assets/6e466724-0f39-4533-96ce-d82713b0d2e2" />
+          <br/>
+          <figcaption>Add to cart product action</figcaption>
+        </figure>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop product catalog with filled cart" src="https://github.com/user-attachments/assets/1997421c-231e-4b7a-bff1-18d0f25fd4b1" />
+          <br/>
+          <figcaption>Product catalog with filled cart</figcaption>
+        </figure>
+      </td>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop shopping cart screen" src="https://github.com/user-attachments/assets/06b67d3d-b7d4-484c-ade5-e215ff0b6adc" />
+          <br/>
+          <figcaption>Shopping cart</figcaption>
+        </figure>
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
 ## Features
 
 - Loads products from the WantAPI product endpoint.
