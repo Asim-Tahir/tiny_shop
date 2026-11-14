@@ -45,7 +45,24 @@ a locally saved shopping cart.
           <figcaption>Shopping cart</figcaption>
         </figure>
       </td>
-      <td></td>
+      <td align="center">
+        <figure>
+          <img width="260" alt="Tiny Shop search product by name, tagline, or description" src="https://github.com/user-attachments/assets/56b17ba1-e357-4ce9-a09d-289e794d5ebe" />
+          <br/>
+          <figcaption>Search product by name, tagline, or description</figcaption>
+        </figure>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <figure>
+            <img width="260" alt="Tiny Shop not found searched products" src="https://github.com/user-attachments/assets/0d9aa081-f04c-482e-a4a5-277b75c8f912" />
+              <br/>
+              <figcaption>Not found searched products</figcaption>
+          </figure>
+      </td>
+      <td align="center"></td>
+      <td align="center"></td>
     </tr>
   </tbody>
 </table>
